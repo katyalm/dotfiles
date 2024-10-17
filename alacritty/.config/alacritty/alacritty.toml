@@ -1,0 +1,19 @@
+import = ["~/.config/alacritty/tokyo-night-storm.toml"]
+live_config_reload = true
+
+[font]
+size = 16.0
+
+[font.normal]
+family = "Hack Nerd Font"
+
+[window]
+decorations = "buttonless"
+dynamic_padding = true
+opacity = 1.0
+option_as_alt = "Both"
+
+[window.padding]
+x = 5
+y = 5
+
