@@ -5,7 +5,8 @@ live_config_reload = true
 size = 16.0
 
 [font.normal]
-family = "Hack Nerd Font"
+family = "IntoneMono Nerd Font Propo"
+style = "Bold"
 
 [window]
 decorations = "buttonless"
