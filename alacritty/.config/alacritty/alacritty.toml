@@ -1,4 +1,4 @@
-import = ["~/.config/alacritty/tokyo-night-storm.toml"]
+import = ["~/.config/alacritty/argonaut.toml"]
 live_config_reload = true
 
 [font]
