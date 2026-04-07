@@ -1,0 +1,115 @@
+[general]
+live_config_reload = true
+
+[terminal.shell]
+program = "wsl.exe"
+args = ["-d", "Ubuntu", "--cd", "~"]
+
+[bell]
+duration = 0
+
+[cursor.style]
+blinking = "Always"
+
+[font]
+size = 12
+
+[font.normal]
+family = "IntoneMono Nerd Font Propo"
+
+[mouse]
+hide_when_typing = false
+
+[window]
+decorations = "buttonless"
+dynamic_padding = true
+opacity = 1.0
+option_as_alt = "Both"
+
+[window.padding]
+x = 5
+y = 5
+
+# --- Dracula colors ---
+[colors.primary]
+background = "#282a36"
+foreground = "#f8f8f2"
+
+[colors.cursor]
+text = "#282a36"
+cursor = "#f8f8f2"
+
+[colors.selection]
+text = "#f8f8f2"
+background = "#44475a"
+
+[colors.normal]
+black   = "#21222c"
+red     = "#ff5555"
+green   = "#50fa7b"
+yellow  = "#f1fa8c"
+blue    = "#bd93f9"
+magenta = "#ff79c6"
+cyan    = "#8be9fd"
+white   = "#f8f8f2"
+
+[colors.bright]
+black   = "#6272a4"
+red     = "#ff6e6e"
+green   = "#69ff94"
+yellow  = "#ffffa5"
+blue    = "#d6acff"
+magenta = "#ff92df"
+cyan    = "#a4ffff"
+white   = "#ffffff"
+
+[keyboard]
+
+bindings = [
+  # --- When you need another instance (rare) ---
+  { key = "N", mods = "Alt", action = "SpawnNewInstance" },
+
+  # --- Pane splitting ---
+  { key = "D", mods = "Alt", chars = "\u0002%" },
+  { key = "D", mods = "Alt|Shift", chars = "\u0002\"" },
+
+  # --- New / close ---
+  { key = "T", mods = "Alt", chars = "\u0002c" },
+  { key = "W", mods = "Alt", chars = "\u0002x" },
+
+  # --- Direct window switching (like tabs) ---
+  { key = "1", mods = "Alt", chars = "\u00021" },
+  { key = "2", mods = "Alt", chars = "\u00022" },
+  { key = "3", mods = "Alt", chars = "\u00023" },
+  { key = "4", mods = "Alt", chars = "\u00024" },
+  { key = "5", mods = "Alt", chars = "\u00025" },
+  { key = "6", mods = "Alt", chars = "\u00026" },
+  { key = "7", mods = "Alt", chars = "\u00027" },
+  { key = "8", mods = "Alt", chars = "\u00028" },
+  { key = "9", mods = "Alt", chars = "\u00029" },
+
+  # --- Zoom pane ---
+  { key = "Enter", mods = "Alt", chars = "\u0002z" },
+
+  # --- Since Alt + Enter will be captured as "z" in base alacritty, we have to define a fullscreen key ---
+  { key = "F11", action = "ToggleFullscreen"},
+
+  # --- Rotate windows ---
+  { key = "R", mods = "Alt", chars = "\u0002o" },
+
+  # --- Go to last pane ---
+  { key = "Semicolon", mods = "Alt", chars = "\u0002;" },
+
+  # --- Copy / scroll mode ---
+  { key = "F", mods = "Alt", chars = "\u0002[" },
+
+  # --- Search ---
+  { key = "F", mods = "Alt|Shift", chars = "\u0002/" },
+
+  # --- Reload tmux config ---
+  { key = "R", mods = "Alt|Shift", chars = "\u0002r" },
+
+  # --- Detach session ---
+  { key = "D", mods = "Alt|Control", chars = "\u0002d" }
+]
+
