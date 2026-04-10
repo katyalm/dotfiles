@@ -1,9 +1,9 @@
-# auto start tmux session
+# Auto start tmux session
 if command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
   tmux new-session -A -s main
 fi
 
-# check/start znap
+# Check/start znap
 [[ -r ~/zsh/znap/znap.zsh ]] ||
     git clone --depth 1 -- \
         https://github.com/marlonrichert/zsh-snap.git ~/zsh/znap
@@ -16,13 +16,13 @@ znap source zsh-users/zsh-completions
 znap source Aloxaf/fzf-tab
 znap source unixorn/fzf-zsh-plugin
 
-# configure autosuggestions
+# Configure auto-suggestions
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)   # history first, then fallback to completion
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=244"        # suggested text is grey
 bindkey '^ ' autosuggest-accept                 # ctrl+space accepts suggestion
 bindkey '^[[C' autosuggest-accept               # right arrow also accepts
 
-# configure completion system
+# Configure completion system
 autoload -Uz compinit && compinit
 
 zstyle ':completion:*' menu select                                         			# arrow-key navigable menu
@@ -32,7 +32,7 @@ zstyle ':completion:*:descriptions' format '[%d]'                         			# g
 zstyle ':fzf-tab:complete:*' fzf-preview 'ls --color $realpath 2>/dev/null || echo $word'
 zstyle ':fzf-tab:*' switch-group '<' '>'                                                  	# switch groups with < / >
 
-# configure history
+# Configure zsh command history
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
 SAVEHIST=100000
@@ -48,9 +48,18 @@ setopt GLOB_DOTS	       # auto complete will recognize . files
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border --cycle"
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window=down:3:wrap --sort"
 
-# aliases
+# Aliases
 alias ls="${aliases[ls]:-ls} -A"
 
-# starship
+# Custom soft-clear that preserves history scrollback
+function soft_clear() {
+  local lines=$((LINES - 2)) 
+  printf '%*s' "$lines" '' | tr ' ' '\n' # trick that prints $lines number of spaces, then transforms the spaces into newlines
+  zle reset-prompt 2>/dev/null || true # re-draws prompt after the newlines
+}
+
+alias clear=soft_clear
+
+# Starship
 eval "$(starship init zsh)"
 
