@@ -51,8 +51,8 @@ format = '[$symbol$branch(:$remote_branch)]($style) '
 
 [git_status]
 style = 'bold red' # default
-format = '([$all_status$ahead_behind]($style))'
-
+# format = '([$all_status$ahead_behind]($style))'
+format = '[$ahead_behind$all_status]($style)'
 # $all_status:
 # 	$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked
 # $ahead_beind:
@@ -62,23 +62,24 @@ format = '([$all_status$ahead_behind]($style))'
 # Trailing spaces for the option string go *after* the (<style string>). 
 
 # $all_status options in default order
+#	Trailing spaces because they can appear in sequence with each other, and they are the tail of the $git_status string.
 
 conflicted 	= '~${count} '
 stashed    	= '*${count} '
 deleted    	= '✘ ' # default + trailing space (could change to - or x)
 renamed    	= '» ' # default + trailing space (could change to >)
 modified	= '!${count} '
-typechanged	= '' # default
+# typechanged	= '' # default
 staged     	= '+${count} '
 untracked  	= '?${count} '
 
 # $ahead_behind status options (only one applies at a time).
 # No trailing spaces, this is the last option in the format string, which already has a trailing space.
 
-ahead      	= '⇡${count}'
-behind     	= '⇣${count}'
-diverged   	= '⇡${ahead_count}⇣${behind_count}'
-up_to_date 	= '' # default
+ahead      	= '[⇡${count}](bold purple) '
+behind     	= '[⇣${count}](bold purple) '
+diverged   	= '[⇡${ahead_count}⇣${behind_count}](bold purple) '
+up_to_date 	= '[✓](bold purple) ' # default is '' empty string
 
 [time]
 format = '[$time]($style) '
