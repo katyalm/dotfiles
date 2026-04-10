@@ -1,0 +1,88 @@
+format = """
+$os\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$time\
+
+$line_break\
+$character
+"""
+
+[os]
+disabled = false
+format = '[$symbol]($style)'
+style = 'bold white' # default
+
+[os.symbols]
+Macos = ' ' # nf-linux-apple
+# alternative option is nf-dev-apple 
+Ubuntu = '  ' # nf-linux-apple
+Windows = '  ' # nf-dev-windows
+
+[directory]
+# style = 'bold cyan' # default
+format = '[󰝰 $path]($style) ' # nf-md-folder_open
+truncate_to_repo = true # default
+truncation_length = 8 # if we are 8 dirs deep, might have a separate problem
+# truncation_symbol = '' # default, also mostly n/a with long truncation length
+
+# The format of a git repo when $before_repo_root_style and $repo_root_style are defined (defaults are empty).
+# But when $truncate_to_repo = true (default), it seems that $before_root_path will be truncated anyways.
+# If $before_repo_root_style is not present in $repo_root_format, it does not have to be defined for repo_root_format to be active.
+# Git repo options
+# 	before_root_path - path before root, but truncated anyways with truncate_to_repo = true
+#	repo_root - *just* the root directory name
+#	path - rest of the path after repo_root
+#	style - mirror base directory style
+#	repo_root_style - style for $repo_root
+
+# repo_root_style = 'cyan'
+# repo_root_format = '[$repo_root]($repo_root_style)[$path]($style) '
+
+[git_branch]
+# style = 'bold purple'
+symbol = ''
+format = '[$symbol$branch(:$remote_branch)]($style) '
+# always_show_remote = true
+# ignore_branches = ["main"]
+
+[git_status]
+style = 'bold red' # default
+format = '([$all_status$ahead_behind]($style))'
+
+# $all_status:
+# 	$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked
+# $ahead_beind:
+# 	diverged, ahead, behind, or up_to_date based on current status of the repo
+
+# If you want to add a dedicated style tag to an option, format the option as '[<option string>](<style string>)'.
+# Trailing spaces for the option string go *after* the (<style string>). 
+
+# $all_status options in default order
+
+conflicted 	= '~${count} '
+stashed    	= '*${count} '
+deleted    	= '✘ ' # default + trailing space (could change to - or x)
+renamed    	= '» ' # default + trailing space (could change to >)
+modified	= '!${count} '
+typechanged	= '' # default
+staged     	= '+${count} '
+untracked  	= '?${count} '
+
+# $ahead_behind status options (only one applies at a time).
+# No trailing spaces, this is the last option in the format string, which already has a trailing space.
+
+ahead      	= '⇡${count}'
+behind     	= '⇣${count}'
+diverged   	= '⇡${ahead_count}⇣${behind_count}'
+up_to_date 	= '' # default
+
+[time]
+format = '[$time]($style) '
+time_format = '%H:%M'
+style = 'bold yellow' # default
+# disabled = false
+
