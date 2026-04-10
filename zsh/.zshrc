@@ -48,17 +48,19 @@ setopt GLOB_DOTS	       # auto complete will recognize . files
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border --cycle"
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window=down:3:wrap --sort"
 
-# Aliases
-alias ls="${aliases[ls]:-ls} -A"
-
 # Custom soft-clear that preserves history scrollback
 function soft_clear() {
   local lines=$((LINES - 2)) 
   printf '%*s' "$lines" '' | tr ' ' '\n' # trick that prints $lines number of spaces, then transforms the spaces into newlines
   zle reset-prompt 2>/dev/null || true # re-draws prompt after the newlines
 }
-
 alias clear=soft_clear
+
+# Wrap all ls aliases with -A
+alias ls="${aliases[ls]:-ls} -A"
+
+# Aliases [ADD PERSONAL ALIASES HERE]
+alias hello="echo 'hi!'"
 
 # Starship
 eval "$(starship init zsh)"
