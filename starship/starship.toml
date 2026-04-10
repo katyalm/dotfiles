@@ -79,7 +79,7 @@ untracked  	= '?${count} '
 ahead      	= '[⇡${count}](bold purple) '
 behind     	= '[⇣${count}](bold purple) '
 diverged   	= '[⇡${ahead_count}⇣${behind_count}](bold purple) '
-up_to_date 	= '[✓](bold purple) ' # default is '' empty string
+up_to_date 	= '[󰄭 ](bold purple) ' # default is '' empty string
 
 [time]
 format = '[$time]($style) '
