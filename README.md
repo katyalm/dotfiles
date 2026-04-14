@@ -1,5 +1,7 @@
 ## katyalm's Dotfiles
 
+### git pull: every time you pull from the repo, you will have to `exec zsh` to apply new changes.
+
 ### Dependencies: Terminal and Font
 
 #### Alacritty
