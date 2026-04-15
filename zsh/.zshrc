@@ -1,7 +1,7 @@
 # Auto start tmux session
-if command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
-  tmux new-session -A -s main
-fi
+# if command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
+  # tmux new-session -A -s main
+# fi
 
 # Check/start znap
 [[ -r ~/zsh/znap/znap.zsh ]] ||
@@ -9,21 +9,21 @@ fi
         https://github.com/marlonrichert/zsh-snap.git ~/zsh/znap
 source ~/zsh/znap/znap.zsh  # start znap
 
+# Configure completion system
+autoload -Uz compinit && compinit
+
 # znap plugins
 znap source zdharma-continuum/fast-syntax-highlighting
 znap source zsh-users/zsh-autosuggestions
 znap source zsh-users/zsh-completions
-znap source Aloxaf/fzf-tab
 znap source unixorn/fzf-zsh-plugin
+znap source Aloxaf/fzf-tab
 
 # Configure auto-suggestions
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)   # history first, then fallback to completion
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=244"        # suggested text is grey
 bindkey '^ ' autosuggest-accept                 # ctrl+space accepts suggestion
 bindkey '^[[C' autosuggest-accept               # right arrow also accepts
-
-# Configure completion system
-autoload -Uz compinit && compinit
 
 zstyle ':completion:*' menu select                                         			# arrow-key navigable menu
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|=*' 'l:|=* r:|=*'  			# case-insensitive fuzzy
