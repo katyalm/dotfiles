@@ -25,6 +25,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=244"        # suggested text is grey
 bindkey '^ ' autosuggest-accept                 # ctrl+space accepts suggestion
 bindkey '^[[C' autosuggest-accept               # right arrow also accepts
 
+# More completion keybinds
 zstyle ':completion:*' menu select                                         			# arrow-key navigable menu
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|=*' 'l:|=* r:|=*'  			# case-insensitive fuzzy
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"                    			# colored entries
