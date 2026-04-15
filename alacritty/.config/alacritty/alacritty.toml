@@ -106,3 +106,4 @@ bindings = [
   # --- Detach session ---
   { key = "D", mods = "Command|Control", chars = "\u0002d" }
 ]
+
