@@ -17,8 +17,7 @@ format = '[$symbol]($style)'
 style = 'bold white' # default
 
 [os.symbols]
-Macos = ' ' # nf-linux-apple
-# alternative option is nf-dev-apple 
+Macos = '  ' # nf-linux-apple  
 Ubuntu = '  ' # nf-linux-apple
 Windows = '  ' # nf-dev-windows
 
