@@ -44,10 +44,15 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 # 1. Syntax highlighting as you type your command
 # 2. Inline suggestions (default based on history, can change to completion)
 # 3. Expands "completion" dictionary with other common tools (docker, brew, etc.)
-zinit wait lucid light-mode for \
-  atinit"zicompinit; zicdreplay" zdharma-continuum/fast-syntax-highlighting \
-  atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions \
-  blockf atpull'zinit creinstall -q .' zsh-users/zsh-completions
+
+zinit ice wait lucid blockf atpull"zinit creinstall -q ."
+zinit light zsh-users/zsh-completions
+
+zinit ice wait lucid atinit"zicompinit; zicdreplay"
+zinit light zdharma-continuum/fast-syntax-highlighting
+
+zinit ice wait lucid atload"_zsh_autosuggest_start"
+zinit light zsh-users/zsh-autosuggestions
 
 # Custom soft-clear that preserves history scrollback
 function soft_clear() {
