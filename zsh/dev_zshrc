@@ -13,7 +13,8 @@
 #       unless it is unset or empty,
 #       then use '${HOME}/.local/share' (this is the standard path for XDG_DATA_HOME).
 #
-# Basically, if you haven't modified your XDG_DATA_HOME path, this expression will use your system's default path for it, or resolve to ~/.local/share manually if your system default has no XDG_DATA_HOME value.
+# Basically, if you haven't modified your XDG_DATA_HOME path, this expression will use your system's default path for it,
+# or it will just manually resolve to ~/.local/share, if your system default has no XDG_DATA_HOME value.
 # If you *have* modified your XDG_DATA_HOME path, this expression will just use that as the path prefix for zinit.
 # If you want to use regular home instead, just change the expression to ${HOME}. The full path string would be "${HOME}/zinit/zinit.git".
 # You can also just change any part of the path to whatever you want, just make sure it paths to zinit.git.
@@ -22,11 +23,20 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"     # Clones the repo if it doesn't exist
 source "${ZINIT_HOME}/zinit.zsh"                                                                        # Starts zinit
 
+# Plugins
+# 1. Syntax highlighting as you type your command
+# 2. Inline suggestions (default based on history, can change to completion)
+# 3. Expands "completion" dictionary with other common tools (docker, brew, etc.)
+zinit wait lucid light-mode for \
+  atinit"zicompinit; zicdreplay" zdharma-continuum/fast-syntax-highlighting \
+  atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions \
+  blockf atpull'zinit creinstall -q .' zsh-users/zsh-completions
+
 # Custom soft-clear that preserves history scrollback
 function soft_clear() {
   local lines=$((LINES - 2)) 
-  printf '%*s' "$lines" '' | tr ' ' '\n' # trick that prints $lines number of spaces, then transforms the spaces into newlines
-  zle reset-prompt 2>/dev/null || true # re-draws prompt after the newlines
+  printf '%*s' "$lines" '' | tr ' ' '\n' 	# trick that prints $lines number of spaces, then transforms the spaces into newlines
+  zle reset-prompt 2>/dev/null || true		# re-draws prompt after the newlines
 }
 alias clear=soft_clear
 
