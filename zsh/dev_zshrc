@@ -40,19 +40,48 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 # Recommended MAX_SIZE from the plugin author is 20. Sometimes my directory names are long, so I use 30.
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 
-# Plugins
-# 1. Syntax highlighting as you type your command
-# 2. Inline suggestions (default based on history, can change to completion)
-# 3. Expands "completion" dictionary with other common tools (docker, brew, etc.)
+# [ --- HISTORY SEARCH WITH PREFIX --- ]
+# When using up/down to navigate through recent commands, this makes it so that
+# it uses what you have already typed as a prefix for the search. That is,
+# it will only scroll through your previous commands that also start with
+# what you currently have typed in the prompt.
 
+# By default, zsh has history-beginning-search-backward/forward widgets that allow you to do this.
+# But, the default widgets preserve your cursor location, so the previous commands appear after
+# your cursor. This is different than the default arrow key history search, which jumps your
+# cursor to the end of each command as you scroll through them.
+# This just defines new widgets that modify the default beginning-search ones to jump
+# your cursor to the end of the command. It uses zsh's built-in history-search-end function to do this.
+autoload -Uz history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+
+# Since we are using zinit turbo ice to load our plugins, we need to make sure our bindkeys load
+# after the plugins load. So, we need to declare these bindkeys in an atload ice for the last
+# plugin that we load. I am wrapping them in this function here to make the atload ice much cleaner,
+# and overall it is much easier to maintain and toggle on/off these bindkeys.
+_bind_history_prefix_search() {
+  bindkey '^[[A' history-beginning-search-backward-end
+  bindkey '^[[B' history-beginning-search-forward-end
+}
+
+# [ --- END HISTORY SEARCH WITH PREFIX --- ]
+
+# [ --- PLUGINS --- ]
+
+# Expands "completion" dictionary with other common tools (docker, brew, etc.)
 zinit ice wait lucid blockf atpull"zinit creinstall -q ."
 zinit light zsh-users/zsh-completions
 
+# Syntax highlighting as you type your command
 zinit ice wait lucid atinit"zicompinit; zicdreplay"
 zinit light zdharma-continuum/fast-syntax-highlighting
 
-zinit ice wait lucid atload"_zsh_autosuggest_start"
+# Inline suggestions (default based on history, can change to completion)
+zinit ice wait lucid atload"_zsh_autosuggest_start; _bind_history_prefix_search"
 zinit light zsh-users/zsh-autosuggestions
+
+# [ --- END PLUGINS --- ]
 
 # Custom soft-clear that preserves history scrollback
 function soft_clear() {
