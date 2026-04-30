@@ -23,6 +23,11 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"     # Clones the repo if it doesn't exist
 source "${ZINIT_HOME}/zinit.zsh"                                                                        # Starts zinit
 
+# Change autosuggest strategy to try completion first, then fall back to command history
+ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+# Disables all suggestions, since the "completion" strategy will update on every keystroke.
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+
 # Plugins
 # 1. Syntax highlighting as you type your command
 # 2. Inline suggestions (default based on history, can change to completion)
