@@ -23,10 +23,22 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"     # Clones the repo if it doesn't exist
 source "${ZINIT_HOME}/zinit.zsh"                                                                        # Starts zinit
 
-# Change autosuggest strategy to try completion first, then fall back to command history
-ZSH_AUTOSUGGEST_STRATEGY=(completion history)
-# Disables all suggestions, since the "completion" strategy will update on every keystroke.
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+# This strategy dictates how your suggestions will be generated.
+# (history completion) will try to find a suggestion from your command history.
+# If it can't, it will then try to find a suggestion using the completion engine (same options as tab-complete).
+# If you want to change the order of priority, you can use (completion history), and if you want to remove one of the
+# strategies entirely, just take it out. It is valid to have just (history) or just (completion).
+#
+# One note about (completion history) is that, most of the time, it functions like (completion). This is because
+# it is designed to find *something* to suggest for every valid command, and it only falls back to your history
+# if it *fails* to find a completion suggestion. In practice, this rarely ever happens. So if you want suggestions
+# from your history, I would recommend having at least (history completion) as your strategy.
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# If the number of characters in the command exceeds MAX_SIZE, autosuggest will stop suggesting.
+# It is mostly intended to prevent autosuggestion trying to run on large amounts of input pasted into the terminal.
+# It is also more important if your STRATEGY has completion first, because completion is more expensive than history.
+# Recommended MAX_SIZE from the plugin author is 20. Sometimes my directory names are long, so I use 30.
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 
 # Plugins
 # 1. Syntax highlighting as you type your command
