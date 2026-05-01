@@ -40,32 +40,28 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 # Recommended MAX_SIZE from the plugin author is 20. Sometimes my directory names are long, so I use 30.
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 
-# [ --- HISTORY SEARCH WITH PREFIX --- ]
-# When using up/down to navigate through recent commands, this makes it so that
-# it uses what you have already typed as a prefix for the search. That is,
-# it will only scroll through your previous commands that also start with
-# what you currently have typed in the prompt.
+# [ --- SUBSTRING HISTORY SEARCH --- ]
+# These two methods are config/setup for the zsh-history-substring-search plugin.
+# The _atinit method are settings that need to be set before the plugin loads,
+# and the _atload method are settings that need to be run after it loads.
+# I have structured it like this so that it is clean to edit the config for
+# the plugin without having to change the zinit ice every time. The ice
+# will always just call atinit"_atinit_..." and atload"_atload_...", so
+# all you have to do is modify the contents of each method.
 
-# By default, zsh has history-beginning-search-backward/forward widgets that allow you to do this.
-# But, the default widgets preserve your cursor location, so the previous commands appear after
-# your cursor. This is different than the default arrow key history search, which jumps your
-# cursor to the end of each command as you scroll through them.
-# This just defines new widgets that modify the default beginning-search ones to jump
-# your cursor to the end of the command. It uses zsh's built-in history-search-end function to do this.
-autoload -Uz history-search-end
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-
-# Since we are using zinit turbo ice to load our plugins, we need to make sure our bindkeys load
-# after the plugins load. So, we need to declare these bindkeys in an atload ice for the last
-# plugin that we load. I am wrapping them in this function here to make the atload ice much cleaner,
-# and overall it is much easier to maintain and toggle on/off these bindkeys.
-_bind_history_prefix_search() {
-  bindkey '^[[A' history-beginning-search-backward-end
-  bindkey '^[[B' history-beginning-search-forward-end
+# If you want to enable/disable these settings, just comment/uncomment them.
+_atinit_history_substring_search() {
+  HISTORY_SUBSTRING_SEARCH_PREFIXED=1 		# If disabled, it will search for your current text as a substring in any part of the commands in your history.
+  # HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1 	# If enabled, it will only show you unique commands in your history scrollback.
+  # HISTORY_SUBSTRING_SEARCH_FUZZY=1 		# If enabled, it will treat anything you have typed as a fuzzy search. i.e. "ab c" will match "*ab*c*".
 }
 
-# [ --- END HISTORY SEARCH WITH PREFIX --- ]
+# zsh-history-substring-search does not bind any keybinds by default, so we have to do it here.
+_atload_history_substring_search() {
+  bindkey '^[[A' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down
+}
+# [ --- END SUBSTRING HISTORY SEARCH --- ]
 
 # [ --- PLUGINS --- ]
 
@@ -77,8 +73,12 @@ zinit light zsh-users/zsh-completions
 zinit ice wait lucid atinit"zicompinit; zicdreplay"
 zinit light zdharma-continuum/fast-syntax-highlighting
 
+# Up/down history search uses current prompt as a prefix
+zinit ice wait lucid atinit"_atinit_history_substring_search" atload"_atload_history_substring_search"
+zinit light zsh-users/zsh-history-substring-search
+
 # Inline suggestions (default based on history, can change to completion)
-zinit ice wait lucid atload"_zsh_autosuggest_start; _bind_history_prefix_search"
+zinit ice wait lucid atload"_zsh_autosuggest_start"
 zinit light zsh-users/zsh-autosuggestions
 
 # [ --- END PLUGINS --- ]
@@ -86,8 +86,8 @@ zinit light zsh-users/zsh-autosuggestions
 # Custom soft-clear that preserves history scrollback
 function soft_clear() {
   local lines=$((LINES - 2)) 
-  printf '%*s' "$lines" '' | tr ' ' '\n' 	# trick that prints $lines number of spaces, then transforms the spaces into newlines
-  zle reset-prompt 2>/dev/null || true		# re-draws prompt after the newlines
+  printf '%*s' "$lines" '' | tr ' ' '\n' 	# A trick that prints $lines number of spaces, then transforms the spaces into newlines.
+  zle reset-prompt 2>/dev/null || true		# This re-draws prompt after the newlines.
 }
 alias clear=soft_clear
 
