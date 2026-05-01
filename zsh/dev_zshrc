@@ -3,6 +3,10 @@
   # tmux new-session -A -s main
 # fi
 
+# [ --- SETOPTS --- ]
+setopt glob_dots
+# [ --- ------- --- ]
+
 # Default ZINIT_HOME path from zdharma-continuum/zinit. Instead of using '~/' (aka $HOME), it uses $XDG_DATA_HOME, which defaults to '~/.local/share'.
 # This follows the XDG Base Directory Specification, which basically just says "please stop putting everything in $HOME, it gets too cluttered"
 # If you are curious for more info about why it is good to use XDG_DATA_HOME, there is an article that discusses it here https://farbenmeer.de/blog/xdg-basisverzeichnis-spezifikation.
@@ -61,27 +65,38 @@ _atload_history_substring_search() {
   bindkey '^[[A' history-substring-search-up
   bindkey '^[[B' history-substring-search-down
 }
-# [ --- END SUBSTRING HISTORY SEARCH --- ]
+# [ --- ----------------------- --- ]
+
+# [ --- COMPSYS ZSTYLE --- ]
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+# [ --- -------------- --- ]
 
 # [ --- PLUGINS --- ]
+# The order matters a lot here! Unless you know what you are doing, do not reorder these plugins.
+# If you want to add more plugins, make sure you understand where they should be inserted into the load order.
 
 # Expands "completion" dictionary with other common tools (docker, brew, etc.)
 zinit ice wait lucid blockf atpull"zinit creinstall -q ."
 zinit light zsh-users/zsh-completions
 
-# Syntax highlighting as you type your command
+# NOTE: the atinit"zicompinit" will run compinit before loading plugins.
 zinit ice wait lucid atinit"zicompinit; zicdreplay"
+zinit light Aloxaf/fzf-tab
+
+# Syntax highlighting as you type your command
+zinit ice wait lucid atinit"zicdreplay"
 zinit light zdharma-continuum/fast-syntax-highlighting
 
 # Up/down history search uses current prompt as a prefix
+# Needs to be loaded AFTER fast-syntax-highlighting, but BEFORE compinit
 zinit ice wait lucid atinit"_atinit_history_substring_search" atload"_atload_history_substring_search"
 zinit light zsh-users/zsh-history-substring-search
 
 # Inline suggestions (default based on history, can change to completion)
+# Needs to be loaded at the end.
 zinit ice wait lucid atload"_zsh_autosuggest_start"
 zinit light zsh-users/zsh-autosuggestions
-
-# [ --- END PLUGINS --- ]
+# [ --- ------- --- ]
 
 # Custom soft-clear that preserves history scrollback
 function soft_clear() {
