@@ -68,7 +68,23 @@ _atload_history_substring_search() {
 # [ --- ----------------------- --- ]
 
 # [ --- COMPSYS ZSTYLE --- ]
-zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+zstyle ':completion:*:git-checkout:*' sort false
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:*' switch-group '<' '>'
+zstyle ':fzf-tab:*' continuous-trigger 'tab'
+
+# IMPORTANT
+# These two settings are effectively incompatibile with each other.
+# 1. The preview ls setting will show a preview of the contents of directories in the menu, if you are tab-completing a 'cd' command.
+# 2. The tmux-popup command brings up the completion menu in a small popup window above your prompt line. It is a nice aesthetic option.
+# HOWEVER the tmux popup window does not scale with the ls preview system, so if you try to enable both, your 'cd' completion menu will be basically unreadable.
+# It is up to you which one you prefer. Just make sure if you enable one, to comment out the other one.
+
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'	# 1. preview ls
+# zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup  			# 2. tmux popup
+
 # [ --- -------------- --- ]
 
 # [ --- PLUGINS --- ]
