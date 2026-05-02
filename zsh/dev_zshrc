@@ -4,6 +4,16 @@
 # fi
 
 # [ --- SETOPTS --- ]
+HISTSIZE=100000
+SAVEHIST=100000
+HISTFILE=~/.zsh_history
+
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_SAVE_NO_DUPS
+setopt SHARE_HISTORY
+setopt HIST_REDUCE_BLANKS
 setopt glob_dots
 # [ --- ------- --- ]
 
@@ -76,14 +86,25 @@ zstyle ':fzf-tab:*' switch-group '<' '>'
 zstyle ':fzf-tab:*' continuous-trigger 'tab'
 
 # IMPORTANT
-# These two settings are effectively incompatibile with each other.
-# 1. The preview ls setting will show a preview of the contents of directories in the menu, if you are tab-completing a 'cd' command.
-# 2. The tmux-popup command brings up the completion menu in a small popup window above your prompt line. It is a nice aesthetic option.
-# HOWEVER the tmux popup window does not scale with the ls preview system, so if you try to enable both, your 'cd' completion menu will be basically unreadable.
-# It is up to you which one you prefer. Just make sure if you enable one, to comment out the other one.
+# These following settings (PREVIEW, TMUX) are effectively incompatibile with each other.
+# The preview options show a preview of the contents of a directory in the tab-completion menu.
+# The tmux option shows the completion menu in a popup window.
+# HOWEVER the tmux popup window does not scale with the ls preview system, so if you try to enable both, your completion menu will be basically unreadable.
+# It is up to you which one you prefer. Only enable one option, and comment out the others: PREVIEW 1, PREVIEW 2, or TMUX.
 
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'	# 1. preview ls
-# zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup  			# 2. tmux popup
+# PREVIEW 1: only cd and ls have previews.
+#     Useful if you want previews when navigating directories, but you find it to be slow enough that you don't want it running on every command.
+# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+# zstyle ':fzf-tab:complete:ls:*' fzf-preview 'ls --color $realpath'
+
+# PREVIEW 2: shows directory previews for all tab complete menus (i.e. if you want to vim a file, but you want help navigating dirs to get there).
+#     Most robust preview option, but technically it runs $realpath on *every* completion option, even if it is a subcommand like 'checkout' or 'commit' for git completion.
+#     So, if you are running this on a system with large filesystems or NFS mounts, and you notice a slowdown when running tab-complete, don't use this option.
+# zstyle ':fzf-tab:complete:*:*' fzf-preview '[ -d $realpath ] && ls --color $realpath'
+
+# TMUX: this displays the completion menu in a small popup window above the prompt. Notably, this has NO directory previews at all.
+#     This requires tmux v3.2 or higher. This is also probably the most performant option, so if you want the lightest weight config, enable this one (or disable all of these options).
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 
 # [ --- -------------- --- ]
 
@@ -91,10 +112,21 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'	# 1. preview 
 # The order matters a lot here! Unless you know what you are doing, do not reorder these plugins.
 # If you want to add more plugins, make sure you understand where they should be inserted into the load order.
 
+# Load and install the fzf binary from the repo. This does not actually clone the repo, which is why we need the second load below.
+# Needs to be loaded first, since we don't want to use turbo mode for this.
+zinit ice from"gh-r" as"program"
+zinit light junegunn/fzf
+
+# Integrates fzf into some shell functions, like Ctrl+R for fuzzy history search.
+# In your zinit/ dir, you will see this repo cloned as fzf-shell. We have to rename it so that zinit doesn't try to use the binary from the first load AS the repository.
+zinit ice wait lucid id-as"fzf-shell" nocompile multisrc"shell/{key-bindings,completion}.zsh"
+zinit light junegunn/fzf
+
 # Expands "completion" dictionary with other common tools (docker, brew, etc.)
 zinit ice wait lucid blockf atpull"zinit creinstall -q ."
 zinit light zsh-users/zsh-completions
 
+# Transforms tab-complete into a fuzzy-searchable menu of options.
 # NOTE: the atinit"zicompinit" will run compinit before loading plugins.
 zinit ice wait lucid atinit"zicompinit; zicdreplay"
 zinit light Aloxaf/fzf-tab
