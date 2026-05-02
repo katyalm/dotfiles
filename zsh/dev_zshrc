@@ -1,7 +1,9 @@
+# [ --- AUTO TMUX --- ]
 # Auto start tmux session
 # if command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
   # tmux new-session -A -s main
 # fi
+# [ --- --------- --- ]
 
 # [ --- SETOPTS --- ]
 HISTSIZE=100000
@@ -17,6 +19,7 @@ setopt HIST_REDUCE_BLANKS
 setopt glob_dots
 # [ --- ------- --- ]
 
+# [ --- ZINIT SETUP --- ]
 # Default ZINIT_HOME path from zdharma-continuum/zinit. Instead of using '~/' (aka $HOME), it uses $XDG_DATA_HOME, which defaults to '~/.local/share'.
 # This follows the XDG Base Directory Specification, which basically just says "please stop putting everything in $HOME, it gets too cluttered"
 # If you are curious for more info about why it is good to use XDG_DATA_HOME, there is an article that discusses it here https://farbenmeer.de/blog/xdg-basisverzeichnis-spezifikation.
@@ -36,7 +39,9 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"                                               # Makes the ZINIT_HOME directory if it doesn't exist
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"     # Clones the repo if it doesn't exist
 source "${ZINIT_HOME}/zinit.zsh"                                                                        # Starts zinit
+# [ --- ----------- --- ]
 
+# [ --- AUTOSUGGEST SETUP --- ]
 # This strategy dictates how your suggestions will be generated.
 # (history completion) will try to find a suggestion from your command history.
 # If it can't, it will then try to find a suggestion using the completion engine (same options as tab-complete).
@@ -53,6 +58,7 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 # It is also more important if your STRATEGY has completion first, because completion is more expensive than history.
 # Recommended MAX_SIZE from the plugin author is 20. Sometimes my directory names are long, so I use 30.
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
+# [ --- ----------------- --- ]
 
 # [ --- SUBSTRING HISTORY SEARCH --- ]
 # These two methods are config/setup for the zsh-history-substring-search plugin.
@@ -105,7 +111,6 @@ zstyle ':fzf-tab:*' continuous-trigger 'tab'
 # TMUX: this displays the completion menu in a small popup window above the prompt. Notably, this has NO directory previews at all.
 #     This requires tmux v3.2 or higher. This is also probably the most performant option, so if you want the lightest weight config, enable this one (or disable all of these options).
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-
 # [ --- -------------- --- ]
 
 # [ --- PLUGINS --- ]
@@ -146,6 +151,7 @@ zinit ice wait lucid atload"_zsh_autosuggest_start"
 zinit light zsh-users/zsh-autosuggestions
 # [ --- ------- --- ]
 
+# [ --- SOFT CLEAR --- ]
 # Custom soft-clear that preserves history scrollback
 function soft_clear() {
   local lines=$((LINES - 2)) 
@@ -153,15 +159,15 @@ function soft_clear() {
   zle reset-prompt 2>/dev/null || true		# This re-draws prompt after the newlines.
 }
 alias clear=soft_clear
+# [ --- ---------- --- ]
 
 # Wrap all ls aliases with -A
 alias ls="${aliases[ls]:-ls} -A"
 
-# Aliases [ADD PERSONAL ALIASES HERE]
-# alias hello="echo 'hi!'"
+# [ --- ALIASES --- ]
+# Add personal aliases here
 alias dev="ssh dev"
-
-# [END OF PERSONAL ALIASES]
+# [ --- ------- --- ]
 
 # Starship
 eval "$(starship init zsh)"
