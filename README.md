@@ -27,7 +27,7 @@ family = "IntoneMono Nerd Font Propo"
 ```
 You can also change the font size property if you want.
 
-### Dependencies: Shell, Prompt, and fzf
+### Dependencies: Shell, Prompt (and sometimes fzf)
 
 Note for Windows: This setup assumes that for Windows systems, you are using WSL (Windows Subsystem for Linux). For any OS-specific sections, just follow the Linux instructions on WSL. 
 
@@ -76,28 +76,8 @@ Again, you **SHOULD NOT** have to do this step yourself, this line already exist
 
 #### fzf
 
-fzf is a fuzzy-finder for command line tools. I find this most useful for searching through my command history (`Ctrl+R`). It allows me to search for just pieces of a command that I remember, and find every version of the command where that substring was part of it. Git repo for this is here https://github.com/junegunn/fzf.
-
-Install fzf. If you are using Homebrew on Linux, just follow the macOS brew command. If you are using a Linux package manager that is not `apt`, you can find the right command for you in the fzf repo.
-<details>
-  <summary>macOS (Homebrew)</summary>
-  <br>
-
-  ```
-  brew install fzf
-  ```
-</details>
-
-<details>
-  <summary>Linux (apt)</summary>
-  <br>
-
-  ```
-  sudo apt install fzf
-  ```
-</details>
-
-Similar to Starship above, the .zshrc is already configured to source/setup fzf correctly for your shell, all you have to do is install it.
+fzf is a binary that enables fuzzy searching for various applications. If you do NOT know what this is and/or haven't installed it manually yourself, no action is needed from you. If you DO know where your current fzf install is, hopefully you are able to look into how to adjust the .zshrc config to just point to your current fzf binary instead of installing your own.
+NOTE for people adjusting the fzf config: The .zshrc also pulls the repo to grab the shell integration scripts to use fzf as part of Ctrl+R history searching. I don't know enough to know whether that impacts your current fzf config or not. Be advised.
 
 ### Enable your config
 
