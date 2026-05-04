@@ -43,8 +43,9 @@ truncation_length = 8 # if we are 8 dirs deep, might have a separate problem
 
 [git_branch]
 # style = 'bold purple'
+# NOTE: to style the $remote_branch separately, you have to manually write out the style string in the parentheses following the [] containing $remote_branch.
 symbol = ''
-format = '[$symbol$branch(:$remote_branch)]($style) '
+format = '[$symbol$branch]($style)[:$remote_branch](purple) '
 # always_show_remote = true
 # ignore_branches = ["main"]
 
