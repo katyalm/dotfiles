@@ -164,10 +164,13 @@ alias clear=soft_clear
 # Wrap all ls aliases with -A
 alias ls="${aliases[ls]:-ls} -A"
 
-# [ --- ALIASES --- ]
-# Add personal aliases here
-alias dev="ssh dev"
-# [ --- ------- --- ]
+# Source .zshrc.local for local settings
+# You can also just put your personal settings at this point in this file as well.
+# Using the generated .zshrc.local file for it is potentially cleaner if you want to
+# continue pulling from the original repo without dealing with merge conflicts.
+# And that way you don't have to deal with this giant file every time you want
+# to adjust your own aliases and other things.
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 # Starship
 eval "$(starship init zsh)"
